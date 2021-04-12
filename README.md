@@ -5,14 +5,14 @@ CDs have become quite antiquated in recent years, and you might still have some 
 ## Setup Spotify Authorization
 
 
-Go to [Spotify Dashboard](https://developer.spotify.com/dashboard/applications) to Create a Spotify Application of any name
+Go to [Spotify Dashboard](https://developer.spotify.com/dashboard/applications) to Create a Spotify Application of any name.
 
 Go to Settings and set Redirect URI to:
 http://localhost:8888/callback
 
 ![Spotify Auth](https://media.giphy.com/media/dNW3FEWCy0h8dZHLKW/giphy.gif)
 
-Open information.yaml and input your authorization information (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
+Open information.yaml and input your Spotify username, your client_id and client_secret from the application you created (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
 ```yaml
 # Spotify Authorization Information
 spotifyInfo:
@@ -21,14 +21,16 @@ spotifyInfo:
     client_secret: INSERT_SPOTIFY_CLIENT_SECRET
     playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
 ```
+
 ## Setup eBay Authorization
-Go to eBay Developer Website and follow Instructions [here](https://developer.ebay.com/DevZone/building-blocks/eBB_Join.pdf) to create a **Production** application.
+With an eBay Developer account create application keys for a **Production** application [here](https://developer.ebay.com/my/keys).
 
 <img src="https://user-images.githubusercontent.com/67870720/114329569-b0525d00-9b0d-11eb-85d8-3336bdc23588.png" width="400">
 
-Make sure to connect this account to your eBay seller account by retrieving a Production User Token (by clicking on the button in the photo shown above) and signing into the Seller Account.
+Connect your developer account to your eBay seller account by retrieving a Production User Token (by clicking on user tokens on application keys page) and signing into your Seller Account.
 
-Insert eBay Application Information (shown above) and price multiplier (percent of average selling price to list item for Example: .85 for 85 percent) into information.yaml:
+Insert the eBay appid, certid, devid, and token (from application keys you created) and price multiplier (percent of average selling price to list item for Example: .85 for 85 percent) into information.yaml:
+
 ```yaml
 # EBay Authorization information (See GitHub)
 api.ebay.com:
@@ -39,8 +41,9 @@ api.ebay.com:
     token: INSERT_EBAY_TOKEN
     pricemultiplier: INSERT_PRICE_MULTIPLIER
 ```
+
 ## Final Setup
-Finally make sure to fill out the rest of the information in the information.yaml (especially the COM (Windows) or serial (OSX or Linux) port of the scanner.
+Finally make sure to fill out the rest of the information in the information.yaml which provides the serial port for the scanner and information for posting the CD on eBay.
 
 ```yaml
 otherInfo:
