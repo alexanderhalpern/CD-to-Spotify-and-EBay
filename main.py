@@ -98,7 +98,6 @@ def calculateListingPrice(upc):
         len(priceData)) * 
         price_multiplier
     )
-    
     salePrice = round(salePrice, 2)
     allPrices.append(salePrice)
     return salePrice
@@ -111,7 +110,6 @@ def postOnEBay(title, spotifyImage, price):
         domain = "api.ebay.com", 
         debug = False
     )
-    
     request = {
         "Item": {
             "Title": title,
@@ -166,7 +164,6 @@ def formatTitles(spotifyTitle):
         'mono', 'stereo', '(ost)', 'digipak',
         'music', 'sdtk', 'original', 'soundtrack'
     ]
-    
     # Remove unnecessary characters from
     # Spotify search and eBay Listing title
     spotifyTitle = spotifyTitle.replace("&", "and")
@@ -321,12 +318,10 @@ def scanBarupc(upc):
         
         # Ask user which CD title is best
         if len(titleList) > 0:
-            
             choice = input(
                 'Enter the number of the most accurate '
                  'search term (Or Enter for 1): '
             )
-            
             if choice == "":
                 choice = 1
             else:
