@@ -57,7 +57,7 @@ otherInfo:
 Save information.yaml, connect your barcode scanner, then cd into the repository, and run:
 
 ```bash
-pip3 install -r requirements.txt
+sudo pip3 install -r requirements.txt
 ```
 
 then
