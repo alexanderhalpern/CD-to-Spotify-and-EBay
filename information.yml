@@ -1,0 +1,29 @@
+# EBay Authorization information (See GitHub)
+api.ebay.com:
+    compatability: 719 #No Need to Change
+    appid: INSERT_EBAY_APP_ID
+    certid: INSERT_EBAY_CERT_ID
+    devid:  INSERT_EBAY_DEV_ID
+    token: INSERT_EBAY_TOKEN
+    pricemultiplier: INSERT_PRICE_MULTIPLIER #Example: .85 would mean that the item would be listed at 85% of Average EBay Listing Price
+
+# Spotify Authorization Information (See GitHub)
+spotifyInfo:
+    user_id: INSERT_SPOTIFY_USERNAME
+    client_id: INSERT_SPOTIFY_CLIENT_ID
+    client_secret: INSERT_SPOTIFY_CLIENT_SECRET
+    playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
+
+# Info for posting on EBay
+#Learn more here: https://developer.ebay.com/devzone/xml/docs/reference/ebay/AddFixedPriceItem.html
+otherInfo:
+    country: INSERT_COUNTRY #Example: US
+    location: INSERT_LOCATION #Example: NY
+    site: INSERT_SITE #Example: US
+    conditionID: INSERT_CONDITION_ID #Example: 4000, See Documentation Above.
+    PayPalEmailAddress: INSERT_PAYPAL_EMAIL
+    description: INSERT_EBAY_DESCRIPTION #Example: Very Good Condition CD
+    currency: INSERT_CURRENCY_TYPE #Example: USD
+    com_port: INSERT_COM_PORT #The COM Port of your connected Barcode Reader. Example: COM3
+
+
