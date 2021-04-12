@@ -1,6 +1,6 @@
 # CDSpotifyConverter
 
-CDs have become quite antiquated in recent years, and you might still have some lying around the house. Instead of just throwing them out, why not transfer the songs on them to your everyday Spotify playlist so you can hold on to your old songs and memories. You can also make a little money by listing them on eBay. CDSpotifyConverter is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners), allowing users to scan the barcodes of many CDs consecutively and automatically adding the contents of those CDs to a requested Spotify Playlist and posting those CDs on eBay for the average selling price of the CD. 
+CDs have become quite antiquated in recent years, and you might still have some lying around the house. Instead of just throwing them out, why not transfer the songs on them to your everyday Spotify playlist so you can hold on to your old songs and memories. You can also make a little money by ' them on eBay. CDSpotifyConverter is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners), allowing users to scan the barcodes of many CDs consecutively and automatically adding the contents of those CDs to a requested Spotify Playlist and posting those CDs on eBay for the average listing price of the CD. 
 
 ## Spotify Authorization Setup
 
@@ -29,7 +29,7 @@ With an eBay Developer account create application keys for a **Production** appl
 
 Connect your developer account to your eBay seller account by retrieving a Production User Token (by clicking on user tokens on application keys page) and signing into your Seller Account.
 
-Insert the eBay appid, certid, devid, and token (from application keys you created) and price multiplier (percent of average selling price to list item for Example: .85 for 85 percent) into information.yaml:
+Insert the eBay appid, certid, devid, and token (from application keys you created) and price multiplier (percent of average listing price to list item for Example: .85 for 85 percent) into information.yaml:
 
 ```yaml
 # EBay Authorization information (See GitHub)
