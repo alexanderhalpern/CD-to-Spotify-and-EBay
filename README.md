@@ -14,7 +14,7 @@ http://localhost:8888/callback
 
 ![Spotify Auth](https://media.giphy.com/media/dNW3FEWCy0h8dZHLKW/giphy.gif)
 
-Create a copy of information.yaml found [here](https://github.com/alexanderhalpern/CD-to-Spotify-and-EBay/blob/main/information.yml) and input your Spotify username, your client_id and client_secret from the application you created (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
+Create a copy of information.yaml found [here](https://github.com/alexanderhalpern/CD-to-Spotify-and-EBay/blob/main/information.yml) (or edit if cloning the repository) and input your Spotify username, your client_id and client_secret from the application you created (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
 ```yaml
 # Spotify Authorization Information
 spotifyInfo:
