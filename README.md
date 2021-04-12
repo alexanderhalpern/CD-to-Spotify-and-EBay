@@ -47,10 +47,10 @@ Finally, make sure to fill out the rest of the information in the information.ya
 
 ```yaml
 otherInfo:
-    country: INSERT_COUNTRY
+    country: INSERT_COUNTRY #Example: US
     location: INSERT_LOCATION #Example: NY
     site: INSERT_SITE #Example: US
-    conditionID: INSERT_CONDITION_ID
+    conditionID: INSERT_CONDITION_ID #See eBay docs
     PayPalEmailAddress: INSERT_PAYPAL_EMAIL
     description: INSERT_EBAY_DESCRIPTION
     currency: INSERT_CURRENCY_TYPE
