@@ -40,7 +40,7 @@ api.ebay.com:
     pricemultiplier: INSERT_PRICE_MULTIPLIER
 ```
 ## Final Setup
-Finally Make Sure to fill out the rest of the information in information.yaml (especially COM port of scanner).
+Finally Make Sure to fill out the rest of the information in information.yaml (especially COM (Windows) or serial (OSX or Linux) port of scanner).
 
 ```yaml
 otherInfo:
