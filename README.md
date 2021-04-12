@@ -54,9 +54,16 @@ otherInfo:
     com_port: INSERT_COM_PORT
 ```
 ## Use
-After saving information.yaml and finishing setup, connect your barcode scanner, cd into the repository, and run:
+Save information.yaml, connect your barcode scanner, then cd into the repository, and run:
+
 ```bash
-python main.py
+pip3 install -r requirements.txt
+```
+
+then
+
+```bash
+python3 main.py
 ```
 
 ## License
