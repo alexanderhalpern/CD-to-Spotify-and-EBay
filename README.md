@@ -1,6 +1,6 @@
 # CD to Spotify and EBay
 
-CDs have become quite antiquated in recent years, and you might still have some lying around the house. Instead of just throwing them out, why not transfer the songs on them to your everyday Spotify playlist so you can hold on to your old songs and memories. You can also make a little money by listing them on eBay. CD-to-Spotify-and-EBay is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners), allowing users to scan the barcodes of many CDs consecutively and automatically adding the contents of those CDs to a requested Spotify Playlist and listing those CDs on eBay for the average listing price of the CD. 
+CDs have become quite antiquated in recent years, and you might still have some lying around the house. Instead of just throwing them out, why not transfer the songs on them to your everyday Spotify playlist so you can hold on to your old songs and memories. You can also make a little money by listing them on eBay. CD-to-Spotify-and-EBay is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners), allowing users to scan the barcodes of many CDs consecutively and automatically add the contents of those CDs to a requested Spotify Playlist and list those CDs on eBay for the average listing price of the CD. 
 
 ## Spotify Authorization Setup
 
