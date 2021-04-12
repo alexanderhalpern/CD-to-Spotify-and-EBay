@@ -142,8 +142,8 @@ def formatTitles(spotifyTitle):
 
     # Prepare CD Title for Spotify Search
     spotifyTitle = spotifyTitle.replace("&", "and")
-    spotifyTitle = spotifyTitle.replace('(used)', '').replace('(new)', '')
-    spotifyTitle = spotifyTitle.replace('Anderson', '').replace('Merchandisers', '')
+    for i in ['(used)', '(new)', 'Anderson', 'Merchandisers']:
+        spotifyTitle = spotifyTitle.replace(i, '')
     ebayTitle = spotifyTitle
     spotifyTitle = spotifyTitle.lower().replace("/", " ")
     spotifyTitle = spotifyTitle.translate(str.maketrans('', '', string.punctuation))
