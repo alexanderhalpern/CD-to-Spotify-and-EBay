@@ -28,7 +28,7 @@ Go to eBay Developer Website and follow Instructions [here](https://developer.eb
 
 Make sure to connect this account to your eBay seller account by retrieving a Production User Token (by clicking on the button in the photo shown above) and signing into the Seller Account.
 
-Insert eBay Application Information (shown above) into information.yaml:
+Insert eBay Application Information (shown above) and price multiplier (percent of average selling price to list item for Example: .85 for 85 percent) into information.yaml:
 ```yaml
 # EBay Authorization information (See GitHub)
 api.ebay.com:
