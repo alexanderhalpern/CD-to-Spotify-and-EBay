@@ -106,7 +106,12 @@ def calculateListingPrice(upc):
 
 def postOnEBay(title, spotifyImage, price):
     # Configure EBay Trading Api
-    api = Connection(config_file="information.yml", domain="api.ebay.com", debug=False)
+    api = Connection(
+        config_file = "information.yml", 
+        domain = "api.ebay.com", 
+        debug = False
+    )
+    
     request = {
         "Item": {
             "Title": title,
@@ -209,7 +214,7 @@ def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, pric
             albumsBaseUrl +
             albumId + 
             "/tracks",
-            headers=package
+            headers = package
         ).json()['items']
         
         trackslist = ",".join([i['uri'] for i in tracks])
@@ -221,7 +226,7 @@ def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, pric
                 playlist_uri +
                 "/tracks?uris=" + 
                 trackslist, 
-                headers=package
+                headers = package
             )
             print('Successfully added to Spotify Playlist')
             postOnEBay(ebayTitle.rstrip('\n'), spotifyImage, price)
@@ -260,7 +265,7 @@ def spotifyCDSearch(spotifyTitle, upc):
     #Search Spotify for CD
     spotifySearch = s.get(
         spotifySearchUrl, 
-        headers=package
+        headers = package
     ).json()
     
     # Integer of how many results were returned
@@ -302,7 +307,7 @@ def scanBarupc(upc):
             for i in upcLookupResults['items'][0]['offers']
         ]
         titleList = list(set(titleList))
-        titleList.sort(key=len)
+        titleList.sort(key = len)
         titleList.reverse()
         
         # Get only the first three titles
