@@ -277,7 +277,7 @@ if __name__ == "__main__":
         upc = ''
         temp = ''
 
-        print("Please Scan the Barcode")
+        print("Please Scan the Barcodes (Scan the Last One Twice to Stop)")
         while True:
             upc = ser.read(12).decode("utf-8")
             if temp == upc:
