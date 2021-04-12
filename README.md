@@ -25,7 +25,7 @@ spotifyInfo:
 ```
 
 ## EBay Authorization Setup
-With an eBay Developer account create application keys for a **Production** Application [here](https://developer.ebay.com/my/keys).
+With an eBay Developer account create application keys for a **Production Application** [here](https://developer.ebay.com/my/keys).
 
 <img src="https://user-images.githubusercontent.com/67870720/114329569-b0525d00-9b0d-11eb-85d8-3336bdc23588.png" width="400">
 
