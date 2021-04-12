@@ -61,14 +61,17 @@ def calculateListingPrice(upc):
         domain = "svcs.ebay.com",
         debug = False
     )
+    
     priceRequest = api.execute(
         'findItemsAdvanced',
         {'keywords': upc}
     ).dict()
+    
     results_count = int(
         priceRequest['searchResult']['_count']
     )
-    # Return -1 if no eBay Search Results found
+    
+    # Get price info or return -1 if no eBay Search Results found
     if results_count != 0:
         priceInfo = priceRequest['searchResult']['item']
     else:
@@ -85,7 +88,7 @@ def calculateListingPrice(upc):
                     priceInfo[i]['shippingInfo']['shippingServiceCost']['value']
                 )
             except:
-                productPrice += 2.5
+                productPrice += 2.89 # Cost of USPS Media Mail
 
             priceData.append(productPrice)
 
@@ -95,6 +98,7 @@ def calculateListingPrice(upc):
         len(priceData)) * 
         price_multiplier
     )
+    
     salePrice = round(salePrice, 2)
     allPrices.append(salePrice)
     return salePrice
@@ -132,7 +136,8 @@ def postOnEBay(title, spotifyImage, price):
             "DispatchTimeMax": "3"
         }
     }
-    # Add Image to EBay request if image found on Spotify
+    
+    # Add image to listing request if image found on Spotify
     if spotifyImage != "":
         request['Item']["PictureDetails"] = {"PictureURL": spotifyImage}
 
@@ -164,7 +169,9 @@ def formatTitles(spotifyTitle):
         spotifyTitle = spotifyTitle.replace(i, '')
     ebayTitle = spotifyTitle
     spotifyTitle = spotifyTitle.lower().replace("/", " ")
-    spotifyTitle = spotifyTitle.translate(str.maketrans('', '', string.punctuation))
+    spotifyTitle = spotifyTitle.translate(
+        str.maketrans('', '', string.punctuation)
+    )
     spotifyTitle = spotifyTitle.replace("  ", " ")
     spotifyTitle = ''.join(
         [i for i in spotifyTitle if not i.isdigit()]
@@ -216,7 +223,6 @@ def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, pric
                 trackslist, 
                 headers=package
             )
-
             print('Successfully added to Spotify Playlist')
             postOnEBay(ebayTitle.rstrip('\n'), spotifyImage, price)
         
@@ -235,7 +241,6 @@ def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, pric
     else:
         print('No tracks found. Going to next CD.\n')
         look = input("Look on Spotify? (Enter or n): ")
-
         if look == 'y' or look == "":
             webbrowser.get().open(baseopen)
 
@@ -292,8 +297,10 @@ def scanBarupc(upc):
     if upcLookupResults['code'] == 'OK':
         # Format returned UPC Titles and arrange from
         # greatest length to least
-        titleList = [formatTitles(i['title'])[0]
-                     for i in upcLookupResults['items'][0]['offers']]
+        titleList = [
+            formatTitles(i['title'])[0]
+            for i in upcLookupResults['items'][0]['offers']
+        ]
         titleList = list(set(titleList))
         titleList.sort(key=len)
         titleList.reverse()
@@ -309,10 +316,12 @@ def scanBarupc(upc):
         
         # Ask user which CD title is best
         if len(titleList) > 0:
+            
             choice = input(
                 'Enter the number of the most accurate '
                  'search term (Or Enter for 1): '
             )
+            
             if choice == "":
                 choice = 1
             else:
