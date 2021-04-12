@@ -9,9 +9,8 @@ from ebaysdk.trading import Connection
 from serial import Serial
 
 
-allPrices = []
-scope = 'playlist-modify-private'
-# Get User Authentication Information
+
+# Get EBay and PayPal User Authentication Information
 with open('information.yml') as file:
     information = yaml.load(file, Loader=yaml.FullLoader)
     ser = Serial(information['otherInfo']['com_port'])
@@ -28,14 +27,21 @@ with open('information.yml') as file:
     client_id = information['spotifyInfo']['client_id']
     client_secret = information['spotifyInfo']['client_secret']
     playlist_uri = information['spotifyInfo']['playlist_uri']
-    redirect_uri = 'http://localhost:8888/callback'
 
+# Create variables for request session and list of CD prices, 
+# set Spotify API scopes, and Spotify redirect URI
+s = requests.session()
+allPrices = []
+scope = 'playlist-modify-private'
+redirect_uri = 'http://localhost:8888/callback'
+
+# Authenticate User on Spotify
 accessToken = spotipy.util.prompt_for_user_token(
-    username=user_id,
-    scope=scope,
-    client_id=client_id,
-    client_secret=client_secret,
-    redirect_uri=redirect_uri
+    username = user_id,
+    scope = scope,
+    client_id = client_id,
+    client_secret = client_secret,
+    redirect_uri = redirect_uri
 )
 
 package = {
@@ -44,16 +50,16 @@ package = {
     "Authorization": "Bearer " + accessToken,
 }
 
-
-def calculateSalesPrice(upc):
-    priceData = []
+# Calculates the price to list the CD on Item For
+def calculateListingPrice(upc):
     # Find eBay Search Results for UPC
+    priceData = []
     api = Finding(
-        siteid='EBAY-US',
-        appid=appid,
-        config_file=None,
-        domain="svcs.ebay.com",
-        debug=False
+        siteid = 'EBAY-US',
+        appid = appid,
+        config_file = None,
+        domain = "svcs.ebay.com",
+        debug = False
     )
     priceRequest = api.execute(
         'findItemsAdvanced',
@@ -62,11 +68,13 @@ def calculateSalesPrice(upc):
     results_count = int(
         priceRequest['searchResult']['_count']
     )
+    # Return -1 if no eBay Search Results found
     if results_count != 0:
         priceInfo = priceRequest['searchResult']['item']
     else:
         return -1
-
+    
+    # Create list of base price + shipping price for listings on eBay
     for i in range(0, results_count):
         if priceInfo[i]['listingInfo']['listingType'] == 'FixedPrice':
             productPrice = float(
@@ -81,15 +89,19 @@ def calculateSalesPrice(upc):
 
             priceData.append(productPrice)
 
-    # Get Sale Price of Item
-    salePrice = (sum(priceData) / len(priceData)) * price_multiplier
+    # Get Average Listing Price of Item and multiply by user-specified multiplier
+    salePrice = (
+        sum(priceData) / 
+        len(priceData)) * 
+        price_multiplier
+    )
     salePrice = round(salePrice, 2)
     allPrices.append(salePrice)
     return salePrice
 
 
 def postOnEBay(title, spotifyImage, price):
-    # Configure Api
+    # Configure EBay Trading Api
     api = Connection(config_file="information.yml", domain="api.ebay.com", debug=False)
     request = {
         "Item": {
@@ -120,27 +132,33 @@ def postOnEBay(title, spotifyImage, price):
             "DispatchTimeMax": "3"
         }
     }
+    # Add Image to EBay request if image found on Spotify
     if spotifyImage != "":
         request['Item']["PictureDetails"] = {"PictureURL": spotifyImage}
 
-    # Continue Program on Failure to Add
+    # Request to add listing to EBay
     try:
         result = api.execute("AddFixedPriceItem", request)
         print('eBay Listing Added Successfully for $', price, "\n")
 
     except Exception as e:
         print('Failed To List Because:', e, "\nGoing to Next CD.")
-
+    
+    # Print total time it took to add songs to Spotify
+    # and list CD on eBay
     end_time = time.time()
     print('Time to Post:', round((end_time - start_time), 2), '\n')
 
 
 def formatTitles(spotifyTitle):
-    removables = ['vinyl', 'lp', 'remastered', 'cd', 'dvd',
-                  'mono', 'stereo', '(ost)', 'digipak',
-                  'music', 'sdtk', 'original', 'soundtrack']
-
-    # Prepare CD Title for Spotify Search
+    removables = [
+        'vinyl', 'lp', 'remastered', 'cd', 'dvd',
+        'mono', 'stereo', '(ost)', 'digipak',
+        'music', 'sdtk', 'original', 'soundtrack'
+    ]
+    
+    # Remove unnecessary characters from
+    # Spotify search and eBay Listing title
     spotifyTitle = spotifyTitle.replace("&", "and")
     for i in ['(used)', '(new)', 'Anderson', 'Merchandisers']:
         spotifyTitle = spotifyTitle.replace(i, '')
@@ -148,53 +166,72 @@ def formatTitles(spotifyTitle):
     spotifyTitle = spotifyTitle.lower().replace("/", " ")
     spotifyTitle = spotifyTitle.translate(str.maketrans('', '', string.punctuation))
     spotifyTitle = spotifyTitle.replace("  ", " ")
-
-    spotifyTitle = ''.join([i for i in spotifyTitle if not i.isdigit()])
-
+    spotifyTitle = ''.join(
+        [i for i in spotifyTitle if not i.isdigit()]
+    )
     for i in removables:
         spotifyTitle = spotifyTitle.replace(i, '')
-
+    
+    # URL encode Spotify title
     spotifyTitle = spotifyTitle.replace(" ", "%20")
     return ebayTitle.strip(), spotifyTitle.strip()
 
 
 def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, price):
-    s = requests.session()
+    # Set request URLs
     baseopen = "https://open.spotify.com/search/" + spotifyTitle
+    playlistBaseUrl = "https://api.spotify.com/v1/playlists/"
+    albumsBaseUrl = "https://api.spotify.com/v1/albums/"
+    
     if resultsReturned != 0:
-        # Get Album Info
-        playlistBaseUrl = "https://api.spotify.com/v1/playlists/"
+        # Organized returned album information
         albumData = spotifySearch['tracks']['items'][0]['album']
         spotifyImage = albumData['images'][0]['url']
         albumId = albumData['id']
 
-        addTrackBool = input("Add " + albumData['name'] + ' by ' +
+        addTrackBool = input(
+            "Add " + 
+            albumData['name'] + 
+            ' by ' +
             albumData['artists'][0]['name'] +
             " to Spotify and eBay? (Enter or n): "
         )
-
-        tracks = s.get("https://api.spotify.com/v1/albums/" +
-                       albumId + "/tracks",
-                       headers=package
+        
+        # Get all tracks from album
+        tracks = s.get(
+            albumsBaseUrl +
+            albumId + 
+            "/tracks",
+            headers=package
         ).json()['items']
-
+        
         trackslist = ",".join([i['uri'] for i in tracks])
 
-        # Add Tracks to Playlist URI
+        # Add all tracks to user-specified playlist URI
         if addTrackBool == "" or addTrackBool == "y":
-            addTracks = s.post(playlistBaseUrl + playlist_uri +
-                        "/tracks?uris=" + trackslist, headers=package
+            addTracks = s.post(
+                playlistBaseUrl + 
+                playlist_uri +
+                "/tracks?uris=" + 
+                trackslist, 
+                headers=package
             )
 
             print('Successfully added to Spotify Playlist')
             postOnEBay(ebayTitle.rstrip('\n'), spotifyImage, price)
-
+        
+        # Ask to open Spotify search in browser if
+        # user does not want to add track due to 
+        # incorrect search result
         else:
             look = input("Look on Spotify? (Enter or n): ")
             if look == 'y' or look == "":
                 webbrowser.get().open(baseopen)
 
             print()
+            
+    # Ask to open Spotify Search in browser if
+    # no Spotify Search results returned
     else:
         print('No tracks found. Going to next CD.\n')
         look = input("Look on Spotify? (Enter or n): ")
@@ -203,81 +240,109 @@ def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, pric
             webbrowser.get().open(baseopen)
 
 
-def spotifyCDSearch(spotifyTitle, upc):
-    s = requests.session()
-
+def spotifyCDSearch(spotifyTitle, upc):    
+    # Get correct formatting for Spotify search
+    # and eBay listing title
     ebayTitle, spotifyTitle = formatTitles(spotifyTitle)
 
-    # Search Spotify by Altered Title
-    spotifySearchUrl = "https://api.spotify.com/v1/search?q=" + spotifyTitle + "&type=track"
-    spotifySearch = s.get(spotifySearchUrl, headers=package)
-
-    spotifySearch = spotifySearch.json()
+    # URL for Spotify Search
+    spotifySearchUrl = (
+        "https://api.spotify.com/v1/search?q=" + 
+        spotifyTitle + 
+        "&type=track"
+    )
+    
+    #Search Spotify for CD
+    spotifySearch = s.get(
+        spotifySearchUrl, 
+        headers=package
+    ).json()
+    
+    # Integer of how many results were returned
+    # from Spotify search
     resultsReturned = spotifySearch['tracks']['total']
-    price = calculateSalesPrice(upc)
+    
+    # Get eBay listing price 
+    price = calculateListingPrice(upc)
+    
+    # Proceed to add the CD to Spotify
+    # if eBay pricing data was found 
     if price != -1:
-        addCDToSpotify(resultsReturned,
-                       ebayTitle,
-                       spotifyTitle,
-                       spotifySearch,
-                       price
+        addCDToSpotify(
+            resultsReturned,
+            ebayTitle,
+            spotifyTitle,
+            spotifySearch,
+            price
         )
     else:
         print('No Pricing Data Found. Going to next CD.\n')
 
 
 def scanBarupc(upc):
+    # Set time of start for adding CD to playlist
+    # and listing on eBay
     global start_time
-    s = requests.session()
     start_time = time.time()
 
-    # Get UPC information from database
+    # Get UPC information from upcitemdb
     upcLookupURL = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + upc
     upcLookupResults = s.get(upcLookupURL).json()
 
     if upcLookupResults['code'] == 'OK':
+        # Format returned UPC Titles and arrange from
+        # greatest length to least
         titleList = [formatTitles(i['title'])[0]
                      for i in upcLookupResults['items'][0]['offers']]
         titleList = list(set(titleList))
         titleList.sort(key=len)
         titleList.reverse()
-
+        
+        # Get only the first three titles
         if len(titleList) >= 3:
             titleList = titleList[0:3]
-
+        
+        # Print possible CD titles for user
         for index, i in enumerate(titleList):
             print(index + 1, ":", i)
-
         print()
-
+        
+        # Ask user which CD title is best
         if len(titleList) > 0:
-            choice = input('Enter the number of the most accurate '
-                           'search term (Or Enter for 1): ')
+            choice = input(
+                'Enter the number of the most accurate '
+                 'search term (Or Enter for 1): '
+            )
             if choice == "":
                 choice = 1
             else:
                 choice = int(choice)
             print()
+            
+            # Search Spotify with chosen title
             spotifyCDSearch(titleList[choice - 1], upc)
 
         else:
-            print("Failed to Find Title")
-
+            print("Failed to Find Title of CD")
+    
+    # Instruct User to use a VPN if they have run 
+    # out of UPC database requests
     elif upcLookupResults['code'] != 'EXCEED_LIMIT':
         print('UPC Barcode Limit Reached. Use VPN to get more requests.')
-
     else:
-        print("Failed to Find UPC")
+        print("Failed to Find UPC Information")
 
 
 if __name__ == "__main__":
     while True:
+        # Reset CD information after each batch of CDs
         allPrices = []
         barcodes = []
         upc = ''
         temp = ''
-
-        print("Please Scan the Barcodes (Scan the Last One Twice to Stop)")
+        
+        # Loop to retrieve all CD Barcodes
+        print("Please Scan the Barcodes (scan the last CD twice to begin transfer to Spotify and listing on eBay)")
         while True:
             upc = ser.read(12).decode("utf-8")
             if temp == upc:
@@ -285,14 +350,20 @@ if __name__ == "__main__":
             temp = upc
             barcodes.append(upc)
             print('Barcode Scanned Successfully')
-
         print()
-
+        
+        # Use retrieved barcodes to add CD tracks to Spotify
+        # and list the CD on eBay
         for upc in barcodes:
             scanBarupc(upc)
+        
+        # Print the average listing price of the CDs
+        # if any price information was found
         try:
-            print("Average CD Sales Price is:",
-              round(sum(allPrices) / len(allPrices), 2), '\n'
+            print(
+              "Average CD Listing Price is:",
+              round(sum(allPrices) / len(allPrices), 2), 
+              '\n'
             )
         except:
             continue
