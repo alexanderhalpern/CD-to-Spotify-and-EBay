@@ -14,7 +14,7 @@ http://localhost:8888/callback
 
 ![Spotify Auth](https://media.giphy.com/media/dNW3FEWCy0h8dZHLKW/giphy.gif)
 
-Open information.yaml and input your Spotify username, your client_id and client_secret from the application you created (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
+Create a copy of information.yaml found [here](https://github.com/alexanderhalpern/CD-to-Spotify-and-EBay/blob/main/information.yml) and input your Spotify username, your client_id and client_secret from the application you created (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to:
 ```yaml
 # Spotify Authorization Information
 spotifyInfo:
@@ -59,7 +59,19 @@ otherInfo:
     com_port: INSERT_COM_PORT
 ```
 ## Usage
-Save information.yaml, connect your barcode scanner, then cd into the repository, and run:
+First pip install the package: 
+```bash
+pip3 install CD_to_Spotify_and_EBay
+```
+Then use the package in python like this:
+```python
+from CD_to_Spotify_and_EBay import BarcodeScanner
+cd = BarcodeScanner('information.yml')
+cd.run()
+```
+OR
+
+Clone this repository, connect your barcode scanner, cd into the repository, and run:
 
 ```bash
 sudo pip3 install -r requirements.txt
@@ -71,7 +83,7 @@ then
 python3 main.py
 ```
 
-Scan a batch of barcodes back to back. Scan the final barcode twice to initiate transfer to Spotify and posting on eBay.
+For both, scan a batch of barcodes back to back and scan the final barcode twice to initiate transfer to Spotify and posting on eBay.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
