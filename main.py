@@ -155,7 +155,7 @@ def formatTitles(spotifyTitle):
         spotifyTitle = spotifyTitle.replace(i, '')
 
     spotifyTitle = spotifyTitle.replace(" ", "%20")
-    return ebayTitle, spotifyTitle
+    return strip(ebayTitle), strip(spotifyTitle)
 
 
 def addCDToSpotify(resultsReturned, ebayTitle, spotifyTitle, spotifySearch, price):
