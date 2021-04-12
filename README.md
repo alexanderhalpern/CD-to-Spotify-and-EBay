@@ -43,7 +43,7 @@ api.ebay.com:
 ```
 
 ## Final Setup
-Finally make sure to fill out the rest of the information in the information.yaml which provides the serial port of the scanner and information for posting the CD on eBay.
+Finally, make sure to fill out the rest of the information in the information.yaml which provides the serial port of the scanner and information for posting the CD on eBay.
 
 ```yaml
 otherInfo:
