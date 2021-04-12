@@ -56,7 +56,7 @@ otherInfo:
     currency: INSERT_CURRENCY_TYPE
     com_port: INSERT_COM_PORT
 ```
-## Use
+## Usage
 Save information.yaml, connect your barcode scanner, then cd into the repository, and run:
 
 ```bash
