@@ -74,7 +74,7 @@ OR
 Clone this repository, connect your barcode scanner, cd into the repository, and run:
 
 ```bash
-sudo pip3 install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 then
