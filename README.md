@@ -22,7 +22,7 @@ spotifyInfo:
     playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
 ```
 ## Setup eBay Authorization
-Go to eBay Developer Website and Follow Instructions [Here](https://developer.ebay.com/DevZone/building-blocks/eBB_Join.pdf) to create a **Production** application.
+Go to eBay Developer Website and Follow Instructions [here](https://developer.ebay.com/DevZone/building-blocks/eBB_Join.pdf) to create a **Production** application.
 
 <img src="https://user-images.githubusercontent.com/67870720/114329569-b0525d00-9b0d-11eb-85d8-3336bdc23588.png" width="400">
 
@@ -40,7 +40,7 @@ api.ebay.com:
     pricemultiplier: INSERT_PRICE_MULTIPLIER
 ```
 ## Final Setup
-Finally Make Sure to fill out the rest of the information in information.yaml (especially COM (Windows) or serial (OSX or Linux) port of scanner).
+Finally make sure to fill out the rest of the information in the information.yaml (especially the COM (Windows) or serial (OSX or Linux) port of the scanner.
 
 ```yaml
 otherInfo:
