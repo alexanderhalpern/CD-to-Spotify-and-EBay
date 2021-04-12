@@ -1,6 +1,6 @@
 # CDSpotifyConverter
 
-CDSpotifyConverter is a Python Application for scanning CD Barcodes, posting the contents of scanned CDs on Spotify, and listing the CDs on eBay.
+CDSpotifyConverter is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners). After users scan the barcodes of many CDs consecutively, the program automatically add the contents of those CDs to a requested Spotify Playlist and posts the CDs on eBay for the average sale price of the scanned CD.
 
 ## Setup Spotify Authorization
 
@@ -12,7 +12,7 @@ http://localhost:8888/callback
 
 ![Spotify Auth](https://media.giphy.com/media/dNW3FEWCy0h8dZHLKW/giphy.gif)
 
-Open information.yaml and input your authorization information (Video Above shows where it is)
+Open information.yaml and input your authorization information (video above shows where it is), as well as the URI of the playlist you would like to add the contents of the CD to.
 ```yaml
 # Spotify Authorization Information
 spotifyInfo:
@@ -65,6 +65,8 @@ then
 ```bash
 python3 main.py
 ```
+
+Scan a batch of barcodes back to back. Scan the final barcode twice to initiate transfer to Spotify and posting on eBay.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
