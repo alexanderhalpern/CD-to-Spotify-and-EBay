@@ -66,7 +66,7 @@ pip3 install CD_to_Spotify_and_EBay
 Then use the package in python like this:
 ```python
 from CD_to_Spotify_and_EBay import BarcodeScanner
-cd = BarcodeScanner('information.yml')
+cd = BarcodeScanner(PATH_TO_INFORMATION.YML)
 cd.run()
 ```
 OR
