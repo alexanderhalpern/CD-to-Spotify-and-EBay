@@ -31,7 +31,7 @@ With an eBay Developer account create application keys for a **Production** appl
 
 Connect your developer account to your eBay seller account by retrieving a Production User Token (by clicking on user tokens on application keys page) and signing into your Seller Account.
 
-Insert the eBay appid, certid, devid, and token (from application keys you created) and price multiplier (percent of average listing price to list item for Example: .85 for 85 percent) into information.yaml:
+Insert the eBay appid, certid, devid, and token (from application keys you created) and pricemultiplier (percent of average listing price to list item for Example: .85 for 85 percent) into information.yaml:
 
 ```yaml
 # EBay Authorization information (See GitHub)
