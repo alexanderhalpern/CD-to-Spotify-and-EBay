@@ -12,7 +12,7 @@ http://localhost:8888/callback
 
 ![Spotify Auth](https://media.giphy.com/media/dNW3FEWCy0h8dZHLKW/giphy.gif)
 
-Open information.yaml and input your authorization information (video above shows where it is), as well as the URI of the playlist you would like to add the contents of the CD to.
+Open information.yaml and input your authorization information (gif above shows where this information is), as well as the URI of the playlist you would like to add the contents of the CD to.
 ```yaml
 # Spotify Authorization Information
 spotifyInfo:
@@ -22,7 +22,7 @@ spotifyInfo:
     playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
 ```
 ## Setup eBay Authorization
-Go to eBay Developer Website and Follow Instructions [here](https://developer.ebay.com/DevZone/building-blocks/eBB_Join.pdf) to create a **Production** application.
+Go to eBay Developer Website and follow Instructions [here](https://developer.ebay.com/DevZone/building-blocks/eBB_Join.pdf) to create a **Production** application.
 
 <img src="https://user-images.githubusercontent.com/67870720/114329569-b0525d00-9b0d-11eb-85d8-3336bdc23588.png" width="400">
 
