@@ -2,7 +2,7 @@
 
 CDs have become quite antiquated in recent years, and you might still have some lying around the house. Instead of just throwing them out, why not transfer the songs on them to your everyday Spotify playlist so you can hold on to your old songs and memories. You can also make a little money by listing them on eBay. CDSpotifyConverter is a Python utility which interfaces with standard barcode scanners (such as Zebra scanners), allowing users to scan the barcodes of many CDs consecutively and automatically adding the contents of those CDs to a requested Spotify Playlist and posting those CDs on eBay for the average selling price of the CD. 
 
-## Setup Spotify Authorization
+## Spotify Authorization Setup
 
 
 Go to [Spotify Dashboard](https://developer.spotify.com/dashboard/applications) to Create a Spotify Application of any name.
@@ -22,7 +22,7 @@ spotifyInfo:
     playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
 ```
 
-## Setup eBay Authorization
+## EBay Authorization Setup
 With an eBay Developer account create application keys for a **Production** application [here](https://developer.ebay.com/my/keys).
 
 <img src="https://user-images.githubusercontent.com/67870720/114329569-b0525d00-9b0d-11eb-85d8-3336bdc23588.png" width="400">
