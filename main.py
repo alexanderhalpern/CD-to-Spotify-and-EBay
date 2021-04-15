@@ -8,7 +8,7 @@ from ebaysdk.finding import Connection as Finding
 from ebaysdk.trading import Connection
 from serial import Serial
 
-class CD_to_Spotify_and_EBay:
+class BarcodeScanner:
     def __init__(self, filepath):
         # Get EBay and PayPal User Authentication Information
         with open(filepath) as file:
@@ -391,5 +391,5 @@ class CD_to_Spotify_and_EBay:
                 continue
 
 if __name__ == "__main__":
-    cd = CD_to_Spotify_and_EBay('information.yml')
+    cd = BarcodeScanner('information.yml')
     cd.run()
