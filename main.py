@@ -2,7 +2,6 @@ import string
 import webbrowser
 import requests
 import spotipy
-import time
 import yaml
 from ebaysdk.finding import Connection as Finding
 from ebaysdk.trading import Connection
@@ -10,54 +9,60 @@ from serial import Serial
 
 class BarcodeScanner:
     def __init__(self, filepath):
-        # Get EBay and PayPal User Authentication Information
+        # Get EBay and PayPal User Authentication Information from YAML
         with open(filepath) as file:
             information = yaml.load(file, Loader=yaml.FullLoader)
-            self.ser = Serial(information['otherInfo']['com_port'])
-            self.country = information['otherInfo']['country']
-            self.location = information['otherInfo']['location']
-            self.site = information['otherInfo']['site']
-            self.conditionID = information['otherInfo']['conditionID']
-            self.PayPalEmailAddress = information['otherInfo']['PayPalEmailAddress']
-            self.description = information['otherInfo']['description']
-            self.currency = information['otherInfo']['currency']
-            self.price_multiplier = information['api.ebay.com']['pricemultiplier']
-            self.appid = information['api.ebay.com']['appid']
+            # Load Spotify Authorization Information from YAML
             self.user_id = information['spotifyInfo']['user_id']
             self.client_id = information['spotifyInfo']['client_id']
             self.client_secret = information['spotifyInfo']['client_secret']
             self.playlist_uri = information['spotifyInfo']['playlist_uri']
 
-        # Create variables for request session and list of CD prices,
-        # set Spotify API scopes, and Spotify redirect URI
-        allPrices = []
+            # Load EBay Authorization Information from YAML
+            self.price_multiplier = information['api.ebay.com']['pricemultiplier']
+            self.ebay_app_id = information['api.ebay.com']['appid']
+
+            # Load other information from YAML
+            self.ser = Serial(information['otherInfo']['com_port'])
+            self.country = information['otherInfo']['country']
+            self.location = information['otherInfo']['location']
+            self.site = information['otherInfo']['site']
+            self.condition_id = information['otherInfo']['conditionID']
+            self.paypal_email_address = information['otherInfo']['PayPalEmailAddress']
+            self.description = information['otherInfo']['description']
+            self.currency = information['otherInfo']['currency']
+
+
+
+        all_scanned_CD_prices = []
         scope = 'playlist-modify-private'
         redirect_uri = 'http://localhost:8888/callback'
+
         # Authenticate User on Spotify
-        self.accessToken = spotipy.util.prompt_for_user_token(
+        self.access_token = spotipy.util.prompt_for_user_token(
             username=self.user_id,
             scope=scope,
             client_id=self.client_id,
             client_secret=self.client_secret,
             redirect_uri=redirect_uri
         )
-        self.package = {
+        self.spotify_auth_package = {
             "Accept": "application/json",
             "Content-Type": "application/json",
-            "Authorization": "Bearer " + self.accessToken,
+            "Authorization": "Bearer " + self.access_token,
         }
 
 
-    # Returns CD titles for searching on Spotify
-    # and listing on eBay
+    # Returns formatted CD titles for searching for the CD
+    # on Spotify and listing the CD on eBay
     def format_titles(self, title):
-        removables = [
+        words_to_remove = [
             'vinyl', 'lp', 'remastered', 'cd', 'dvd',
             'mono', 'stereo', '(ost)', 'digipak',
             'music', 'sdtk', 'original', 'soundtrack'
         ]
-        # Remove unnecessary characters from
-        # Spotify search and eBay Listing title
+        # Remove unnecessary words from
+        # Spotify CD Title for Search and eBay CD title for listing
         title = title.replace("&", "and")
         for i in ['(used)', '(new)', 'Anderson', 'Merchandisers']:
             title = title.replace(i, '')
@@ -70,7 +75,7 @@ class BarcodeScanner:
         title = ''.join(
             [i for i in title if not i.isdigit()]
         )
-        for i in removables:
+        for i in words_to_remove:
             title = title.replace(i, '')
 
         # URL encode Spotify title
@@ -79,33 +84,31 @@ class BarcodeScanner:
         return ebayTitle.strip(), spotifyTitle.strip()
 
 
-    def get_CD_title_from_UPC(self, upc):
-        # Set time of start for adding CD to playlist
+    def get_CD_title_by_UPC(self, upc):
         s = requests.session()
-        # and listing on eBay
-        global start_time
-        start_time = time.time()
-
         # Get UPC information from upcitemdb
         upcLookupURL = "https://api.upcitemdb.com/prod/trial/lookup?upc=" + upc
         upcLookupResults = s.get(upcLookupURL).json()
 
         if upcLookupResults['code'] == 'OK':
-            # Format returned UPC Titles and arrange from
-            # greatest length to least
+            # UPC Database returns many possible titles
+            # Make a list of all possible titles and format them
             titleList = [
                 self.format_titles(i['title'])[0]
                 for i in upcLookupResults['items'][0]['offers']
             ]
+
+            # Put titles in order from longest to shortest
+            # (Longer titles usually have more information about the CD)
             titleList = list(set(titleList))
             titleList.sort(key=len)
             titleList.reverse()
 
-            # Get only the first three titles
+            # Print three possible CD titles for the user to choose which
+            # title is most accurate
             if len(titleList) >= 3:
                 titleList = titleList[0:3]
 
-            # Print possible CD titles for user
             for index, i in enumerate(titleList):
                 print(index + 1, ":", i)
 
@@ -140,7 +143,7 @@ class BarcodeScanner:
 
     def search_spotify_by_CD_title(self, title):
         s = requests.session()
-        # Get correct formatting for Spotify search
+        # Get correct formatting for Spotify search terms
         global spotifyTitle
         spotifyTitle = self.format_titles(title)[1]
 
@@ -151,10 +154,10 @@ class BarcodeScanner:
                 "&type=track"
         )
 
-        # Search Spotify for CD
+        # Search Spotify for the scanned CD
         spotifySearchResults = s.get(
             spotifySearchUrl,
-            headers=self.package
+            headers=self.spotify_auth_package
         ).json()
         return spotifySearchResults
 
@@ -189,7 +192,7 @@ class BarcodeScanner:
                 albumsBaseUrl +
                 albumId +
                 "/tracks",
-                headers = self.package
+                headers = self.spotify_auth_package
             ).json()['items']
 
             trackslist = ",".join([i['uri'] for i in tracks])
@@ -201,7 +204,7 @@ class BarcodeScanner:
                     self.playlist_uri +
                     "/tracks?uris=" +
                     trackslist,
-                    headers=self.package
+                    headers=self.spotify_auth_package
                 )
                 print('Successfully added to Spotify Playlist')
                 return spotifyImage
@@ -235,7 +238,7 @@ class BarcodeScanner:
         priceData = []
         api = Finding(
             siteid = 'EBAY-US',
-            appid = self.appid,
+            appid = self.ebay_app_id,
             config_file = None,
             domain = "svcs.ebay.com",
             debug = False
@@ -278,7 +281,7 @@ class BarcodeScanner:
                 self.price_multiplier
         )
         salePrice = round(salePrice, 2)
-        self.allPrices.append(salePrice)
+        self.all_scanned_CD_prices.append(salePrice)
         return salePrice
 
 
@@ -307,9 +310,9 @@ class BarcodeScanner:
                 "Country": self.country,
                 "Location": self.location,
                 "Site": self.site,
-                "ConditionID": self.conditionID,
+                "ConditionID": self.condition_id,
                 "PaymentMethods": "PayPal",
-                "PayPalEmailAddress": self.PayPalEmailAddress,
+                "PayPalEmailAddress": self.paypal_email_address,
                 "PrimaryCategory": {"CategoryID": "176984"},
                 "Description": self.description,
                 "StartPrice": self.price,
@@ -343,19 +346,15 @@ class BarcodeScanner:
         except Exception as e:
             print('Failed To List Because:', e, "\nGoing to Next CD.")
 
-        # Print total time it took to add songs to Spotify
-        # and list CD on eBay
-        end_time = time.time()
-        print('Time to Post:', round((end_time - start_time), 2), '\n')
 
 
-    def run(self):
+    def begin_scanning(self):
         while True:
             # Reset CD information after each batch of CDs
             global upc
             upc = ''
             temp = ''
-            allPrices = []
+            all_scanned_CD_prices = []
             barcodes = []
 
             # Loop to retrieve all CD Barcodes
@@ -372,7 +371,7 @@ class BarcodeScanner:
             # Use retrieved barcodes to add CD tracks to Spotify
             # and list the CD on eBay
             for upc in barcodes:
-                title = self.get_CD_title_from_UPC(upc)
+                title = self.get_CD_title_by_UPC(upc)
                 if title != -1:
                     spotifySearchResults = self.search_spotify_by_CD_title(title)
                     spotifyImage = self.add_CD_to_playlist(spotifySearchResults)
@@ -381,15 +380,16 @@ class BarcodeScanner:
 
             # Print the average listing price of the CDs
             # if any price information was found
+            # or just continue with the loop if not found
             try:
                 print(
                     "Average CD Listing Price is:",
-                    round(sum(allPrices) / len(allPrices), 2),
+                    round(sum(all_scanned_CD_prices) / len(all_scanned_CD_prices), 2),
                     '\n'
                 )
             except:
                 continue
 
 if __name__ == "__main__":
-    cd = BarcodeScanner('information.yml')
-    cd.run()
+    BarcodeScanningSession = BarcodeScanner('information.yml')
+    BarcodeScanningSession.begin_scanning()
