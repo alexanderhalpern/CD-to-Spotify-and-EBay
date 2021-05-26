@@ -15,7 +15,7 @@ spotifyInfo:
     playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
 
 # Info for posting on EBay
-#Learn more here: https://developer.ebay.com/devzone/xml/docs/reference/ebay/AddFixedPriceItem.html
+# Learn more here: https://developer.ebay.com/devzone/xml/docs/reference/ebay/AddFixedPriceItem.html
 otherInfo:
     country: INSERT_COUNTRY #Example: US
     location: INSERT_LOCATION #Example: NY
