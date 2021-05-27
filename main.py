@@ -348,7 +348,7 @@ class BarcodeScanner:
 
 
 
-    def begin_scanning(self):
+    def run(self):
         while True:
             # Reset CD information after each batch of CDs
             global upc
@@ -392,4 +392,4 @@ class BarcodeScanner:
 
 if __name__ == "__main__":
     BarcodeScanningSession = BarcodeScanner('information.yml')
-    BarcodeScanningSession.begin_scanning()
+    BarcodeScanningSession.run()
