@@ -1,29 +1,26 @@
-# EBay Authorization information (See GitHub)
+# EBay Trading API - https://www.x.com/developers/ebay/products/trading-api
 api.ebay.com:
-    compatability: 719 #No Need to Change
-    appid: INSERT_EBAY_APP_ID
-    certid: INSERT_EBAY_CERT_ID
-    devid:  INSERT_EBAY_DEV_ID
-    token: INSERT_EBAY_TOKEN
-    pricemultiplier: INSERT_PRICE_MULTIPLIER #Example: .85 would mean that the item would be listed at 85% of Average EBay Listing Price
+    compatability: 719
+    appid: CandaceH-CDConver-PRD-884e897d2-6966fdf3
+    certid: PRD-84e897d23bfa-c5db-4f57-9f1a-3398
+    devid:  8ff42c95-ea0a-4ccf-963e-48618a9dac8d
+    token: AgAAAA**AQAAAA**aAAAAA**J/9tYA**nY+sHZ2PrBmdj6wVnY+sEZ2PrA2dj6AAlIqhCZmDpQydj6x9nY+seQ**hKkGAA**AAMAAA**z8RwdRica/rt0CNmJLI1zhDTIlYmyqP2Gdca/bmR0HRszPkgsWhxyTmJXAKUxSPdhOjnZqvGq9MpeEqDE+g6/nPwd3SiKNyRAsCtYhB4oqQMRRnsW/niSM9UCp4NUgndHb2Jyw/87aEE9g13CGAU0iDyYtfAf5VWOn+mTuWVl8LOO4zVenoL0kD80yVXVmMFJcdZOt72NqgBL66cMSAkcVjzl0dsFn8Iz2ImakXy6XtZhkRNRSCkQaBK89LruPPefvof4ogWSJ4HujkWor9YYqM1F47FL93xbMUG2pGERhGgerOfJZWDQB0ftD3JU5opHBbqJo99VinWWX1VWrEbVsaD5rtCCBOzUItCJFHFr7jQzbmCJkWZtH1Twma5Vaj/E1MJH66x++CUBs1plWntxfnYrF8uyfZ+/pg8HMQZkvrVHw+ERYnWj6n7DbkhFkkpTGeLrL2M7WEUwgnOSqmIk0BtUSbG+9h/mmiq3FIQ0EuETQP7kCkVZ/GUXkCByJMoHxyt/CoeeBLe4hnX6GcFPoeIMXe+ECzpZXJLDprF+5e/hrBayhmYf7I0WZR/w2O1U9icw7xD0+BHmbHynl5xOzPzEczv41rUcwKetLbQs2peqt+HOGGfxzZjU1KpfamcHI5NWl2jhvj73ztOdLCsJngN2xEC4oybnAUiY02xfSaRw+VJ0du+S7w0dXrpFxWf7geGil0IuU5bpu+WY0XvW1JFmZGphL79C8g43vGd97L9RAKWbM0vcFTJAiyayT4L
+    pricemultiplier: .85
 
-# Spotify Authorization Information (See GitHub)
+#Spotify Authorization Information
 spotifyInfo:
-    user_id: INSERT_SPOTIFY_USERNAME
-    client_id: INSERT_SPOTIFY_CLIENT_ID
-    client_secret: INSERT_SPOTIFY_CLIENT_SECRET
-    playlist_uri: INSERT_SPOTIFY_PLAYLIST_URI
+    user_id: candacecline
+    client_id: a344948ca86641598abd139efc86ef93
+    client_secret: f5e5fc00d2e84cd9a40ca6ed13ce202f
+    playlist_uri: 1hMGJPazHzCIgGbnaa6ZXn
 
-# Info for posting on EBay
-# Learn more here: https://developer.ebay.com/devzone/xml/docs/reference/ebay/AddFixedPriceItem.html
 otherInfo:
-    country: INSERT_COUNTRY #Example: US
-    location: INSERT_LOCATION #Example: NY
-    site: INSERT_SITE #Example: US
-    conditionID: INSERT_CONDITION_ID #Example: 4000, See Documentation Above.
-    PayPalEmailAddress: INSERT_PAYPAL_EMAIL
-    description: INSERT_EBAY_DESCRIPTION #Example: Very Good Condition CD
-    currency: INSERT_CURRENCY_TYPE #Example: USD
-    com_port: INSERT_COM_PORT #The COM Port of your connected Barcode Reader. Example: COM3
-
+    com_port: COM3
+    country: US
+    location: Connecticut
+    site: US
+    conditionID: 4000
+    PayPalEmailAddress: snoopdoxydog@gmail.com
+    description: Very Good Condition CD
+    currency: USD
 

@@ -34,7 +34,7 @@ class BarcodeScanner:
 
 
 
-        all_scanned_CD_prices = []
+        self.all_scanned_CD_prices = []
         scope = 'playlist-modify-private'
         redirect_uri = 'http://localhost:8888/callback'
 
@@ -291,11 +291,11 @@ class BarcodeScanner:
         ebayTitle = self.format_titles(title)[0]
 
         # Get eBay listing price
-        price = self.calculate_listing_price(upc)
+        self.price = self.calculate_listing_price(upc)
 
         # Proceed to add the CD to Spotify
         # if eBay pricing data was found
-        if price == -1:
+        if self.price == -1:
             print('No Pricing Data Found. Going to next CD.\n')
             return -1
 
@@ -341,7 +341,7 @@ class BarcodeScanner:
         # Request to add listing to EBay
         try:
             result = api.execute("AddFixedPriceItem", request)
-            print('eBay Listing Added Successfully for $', price, "\n")
+            print('eBay Listing Added Successfully for $', self.price, "\n")
 
         except Exception as e:
             print('Failed To List Because:', e, "\nGoing to Next CD.")
